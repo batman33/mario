@@ -9,7 +9,7 @@ export default class Level {
      * @type {number}
      * @public
      */
-    this.gravity = 2000;
+    this.gravity = 1500;
     /**
      * @type {number}
      * @public

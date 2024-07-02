@@ -1,5 +1,12 @@
 import { Vec2 } from "./math.js";
 
+export const Sides = {
+  BOTTOM: Symbol("bottom"),
+  TOP: Symbol("top"),
+  LEFT: Symbol("left"),
+  RIGHT: Symbol("right"),
+};
+
 export class Trait {
   constructor(name) {
     /**
@@ -7,6 +14,12 @@ export class Trait {
      */
     this.NAME = name;
   }
+
+  /**
+   * @param {Entity} entity
+   * @param {"bottom"|"top"|"left"|"right"} side
+   */
+  obstruct(entity, side) {}
 
   update() {
     console.warn("Unhandled update call in Trait");
@@ -39,6 +52,12 @@ export default class Entity {
   addTrait(trait) {
     this.traits.push(trait);
     this[trait.NAME] = trait;
+  }
+
+  obstruct(side) {
+    this.traits.forEach((trait) => {
+      trait.obstruct(this, side);
+    });
   }
 
   /**
