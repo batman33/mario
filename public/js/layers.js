@@ -1,15 +1,15 @@
+import Camera from "./Camera.js";
 import Entity from "./Entity.js";
 import Level from "./Level.js";
-import Camera from "./Camera.js";
 import SpriteSheet from "./SpriteSheet.js";
+import TileResolver from "./TileResolver.js";
 
 /**
  * @param {Level} level
  * @param {SpriteSheet} sprites
  */
-export function createBackgroundLayer(level, sprites) {
-  const tiles = level.tiles;
-  const resolver = level.tileCollider.tiles;
+export function createBackgroundLayer(level, tiles, sprites) {
+  const resolver = new TileResolver(tiles);
 
   const buffer = document.createElement("canvas");
 
@@ -18,28 +18,15 @@ export function createBackgroundLayer(level, sprites) {
 
   const context = buffer.getContext("2d");
 
-  let startIndex, endIndex;
+  function redraw(startIndex, endIndex) {
+    context.clearRect(0, 0, buffer.width, buffer.height);
 
-  function redraw(drawFrom, drawTo) {
-    // if (drawFrom === startIndex && drawTo === endIndex) {
-    //   return;
-    // }
-
-    startIndex = drawFrom;
-    endIndex = drawTo;
-
-    for (let x = startIndex; x < endIndex; x++) {
+    for (let x = startIndex; x <= endIndex; ++x) {
       const col = tiles.grid[x];
       if (col) {
         col.forEach((tile, y) => {
           if (sprites.animations.has(tile.name)) {
-            sprites.drawAnimation(
-              tile.name,
-              context,
-              x - startIndex,
-              y,
-              level.totalTime
-            );
+            sprites.drawAnimation(tile.name, context, x - startIndex, y, level.totalTime);
           } else {
             sprites.drawTile(tile.name, context, x - startIndex, y);
           }
@@ -77,11 +64,7 @@ export function createSpriteLayer(entities, width = 64, height = 64) {
 
       entity.draw(spriteBufferContext);
 
-      context.drawImage(
-        spriteBuffer,
-        entity.pos.x - camera.pos.x,
-        entity.pos.y - camera.pos.y
-      );
+      context.drawImage(spriteBuffer, entity.pos.x - camera.pos.x, entity.pos.y - camera.pos.y);
     });
   };
 }
@@ -108,24 +91,14 @@ export function createCollisionLayer(level) {
     context.strokeStyle = "blue";
     resolvedTiles.forEach(({ x, y }) => {
       context.beginPath();
-      context.rect(
-        x * tileSize - camera.pos.x,
-        y * tileSize - camera.pos.y,
-        tileSize,
-        tileSize
-      );
+      context.rect(x * tileSize - camera.pos.x, y * tileSize - camera.pos.y, tileSize, tileSize);
       context.stroke();
     });
 
     context.strokeStyle = "red";
     level.entities.forEach((entity) => {
       context.beginPath();
-      context.rect(
-        entity.pos.x - camera.pos.x,
-        entity.pos.y - camera.pos.y,
-        entity.size.x,
-        entity.size.y
-      );
+      context.rect(entity.pos.x - camera.pos.x, entity.pos.y - camera.pos.y, entity.size.x, entity.size.y);
       context.stroke();
     });
 

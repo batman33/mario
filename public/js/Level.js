@@ -1,7 +1,6 @@
 import Compositor from "./Compositor.js";
 import Entity from "./Entity.js";
 import TileCollider from "./TileCollider.js";
-import { Matrix } from "./math.js";
 
 export default class Level {
   constructor() {
@@ -26,15 +25,14 @@ export default class Level {
      */
     this.entities = new Set();
     /**
-     * @type {Matrix}
-     * @public
-     */
-    this.tiles = new Matrix();
-    /**
      * @type {TileCollider}
      * @public
      */
-    this.tileCollider = new TileCollider(this.tiles);
+    this.tileCollider = null;
+  }
+
+  setCollisionGrid(matrix) {
+    this.tileCollider = new TileCollider(matrix);
   }
 
   /**

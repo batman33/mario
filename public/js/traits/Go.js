@@ -26,7 +26,7 @@ export default class Go extends Trait {
     /**
      * @type {number}
      */
-    this.heading = 0;
+    this.heading = 1;
   }
 
   /**
@@ -44,10 +44,8 @@ export default class Go extends Trait {
           this.heading = this.direction;
         }
       } else {
-        this.heading = this.dir;
+        this.heading = this.direction;
       }
-
-      this.heading = this.direction;
     } else if (entity.vel.x !== 0) {
       const deceleration = Math.min(absX, this.deceleration * deltaTime);
       entity.vel.x += entity.vel.x > 0 ? -deceleration : deceleration;

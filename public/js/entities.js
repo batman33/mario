@@ -10,13 +10,12 @@ const FAST_DRAG = 1 / 5000;
 export function createMario() {
   return loadSpriteSheet("mario").then((sprite) => {
     const mario = new Entity();
-
     mario.size.set(14, 16);
 
     mario.addTrait(new Go());
-    mario.addTrait(new Jump());
-
     mario.go.dragFactor = SLOW_DRAG;
+
+    mario.addTrait(new Jump());
 
     mario.turbo = function setTurboState(turboOn) {
       this.go.dragFactor = turboOn ? FAST_DRAG : SLOW_DRAG;
@@ -29,10 +28,7 @@ export function createMario() {
         return "jump";
       }
       if (mario.go.distance > 0) {
-        if (
-          (mario.vel.x > 0 && mario.go.direction < 0) ||
-          (mario.vel.x < 0 && mario.go.direction > 0)
-        ) {
+        if ((mario.vel.x > 0 && mario.go.direction < 0) || (mario.vel.x < 0 && mario.go.direction > 0)) {
           return "break";
         }
 
