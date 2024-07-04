@@ -31,7 +31,7 @@
     "animations": [
         {
             "name": "run",
-            "frameLen": 6,
+            "frameLength": 6,
             "frames": [
                 "run-1",
                 "run-2",

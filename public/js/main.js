@@ -1,8 +1,11 @@
 import Camera from "./Camera.js";
 import Timer from "./Timer.js";
-import { createMario } from "./entities.js";
+import { loadMario } from "./entities/Mario.js";
+import { loadGoomba } from "./entities/Goomba.js";
+import { loadKoopa } from "./entities/Koopa.js";
 import { loadLevel } from "./loaders/level.js";
 import { setupKeyboard } from "./input.js";
+import { createCollisionLayer } from "./layers.js";
 
 /**
  * @type {HTMLCanvasElement} canvas
@@ -13,26 +16,38 @@ const canvas = document.getElementById("screen");
  */
 const context = canvas.getContext("2d");
 
-Promise.all([createMario(), loadLevel("1-1")]).then(([mario, level]) => {
-  const camera = new Camera();
+Promise.all([loadMario(), loadGoomba(), loadKoopa(), loadLevel("1-1")]).then(
+  ([createMario, createGoomba, createKoopa, level]) => {
+    const camera = new Camera();
 
-  mario.pos.set(64, 64);
+    const goomba = createGoomba();
+    goomba.pos.x = 220;
+    level.entities.add(goomba);
 
-  level.entities.add(mario);
+    const koopa = createKoopa();
+    koopa.pos.x = 260;
+    level.entities.add(koopa);
 
-  const input = setupKeyboard(mario);
-  input.listenTo(window);
+    const mario = createMario();
+    mario.pos.set(64, 64);
+    level.entities.add(mario);
 
-  const timer = new Timer(1 / 60);
-  timer.update = function update(deltaTime) {
-    level.update(deltaTime);
+    level.compositor.layers.push(createCollisionLayer(level));
 
-    if (mario.pos.x > 100) {
-      camera.pos.x = mario.pos.x - 100;
-    }
+    const input = setupKeyboard(mario);
+    input.listenTo(window);
 
-    level.compositor.draw(context, camera);
-  };
+    const timer = new Timer(1 / 60);
+    timer.update = function update(deltaTime) {
+      level.update(deltaTime);
 
-  timer.start();
-});
+      if (mario.pos.x > 100) {
+        camera.pos.x = mario.pos.x - 100;
+      }
+
+      level.compositor.draw(context, camera);
+    };
+
+    timer.start();
+  }
+);

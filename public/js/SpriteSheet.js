@@ -79,9 +79,6 @@ export default class SpriteSheet {
    * @param {number} y
    */
   draw(name, context, x, y, flip = false) {
-    if (!name) {
-      debugger;
-    }
     const buffer = this.tiles.get(name)[flip ? 1 : 0];
     context.drawImage(buffer, x, y);
   }
