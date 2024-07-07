@@ -14,6 +14,19 @@ export class Trait {
      * @type {string}
      */
     this.NAME = name;
+    /**
+     * @type {[]}
+     */
+    this.tasks = [];
+  }
+
+  finalize() {
+    this.tasks.forEach((task) => task());
+    this.tasks.length = 0;
+  }
+
+  queue(task) {
+    this.tasks.push(task);
   }
 
   /**
@@ -33,10 +46,6 @@ export class Trait {
 
 export default class Entity {
   constructor() {
-    /**
-     * @type {boolean}
-     */
-    this.canCollide = true;
     /**
      * @type {Vec2}
      */
@@ -81,13 +90,19 @@ export default class Entity {
     });
   }
 
-  obstruct(side) {
+  obstruct(side, match) {
     this.traits.forEach((trait) => {
-      trait.obstruct(this, side);
+      trait.obstruct(this, side, match);
     });
   }
 
   draw() {}
+
+  finalize() {
+    this.traits.forEach((trait) => {
+      trait.finalize();
+    });
+  }
 
   /**
    * @param {number} deltaTime
