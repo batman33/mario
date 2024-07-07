@@ -34,10 +34,18 @@ export class Matrix {
 }
 
 export class Vec2 {
+  /**
+   * @param {number} x
+   * @param {number} y
+   */
   constructor(x, y) {
     this.set(x, y);
   }
 
+  /**
+   * @param {number} x
+   * @param {number} y
+   */
   set(x, y) {
     /**
      * @type {number}

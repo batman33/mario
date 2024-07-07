@@ -22,13 +22,21 @@ export class Trait {
    */
   obstruct(entity, side) {}
 
-  update() {
-    console.warn("Unhandled update call in Trait");
-  }
+  /**
+   * @param {Entity} us
+   * @param {Entity} them
+   */
+  collides(us, them) {}
+
+  update() {}
 }
 
 export default class Entity {
   constructor() {
+    /**
+     * @type {boolean}
+     */
+    this.canCollide = true;
     /**
      * @type {Vec2}
      */
@@ -67,18 +75,26 @@ export default class Entity {
     this[trait.NAME] = trait;
   }
 
+  collides(candidate) {
+    this.traits.forEach((trait) => {
+      trait.collides(this, candidate);
+    });
+  }
+
   obstruct(side) {
     this.traits.forEach((trait) => {
       trait.obstruct(this, side);
     });
   }
 
+  draw() {}
+
   /**
    * @param {number} deltaTime
    */
-  update(deltaTime) {
+  update(deltaTime, level) {
     this.traits.forEach((trait) => {
-      trait.update(this, deltaTime);
+      trait.update(this, deltaTime, level);
     });
 
     this.lifeTime += deltaTime;
