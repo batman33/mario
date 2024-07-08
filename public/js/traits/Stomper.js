@@ -5,6 +5,8 @@ export default class Stomper extends Trait {
     super("stomper");
 
     this.bounceSpeed = 400;
+
+    this.onStomp = function () {};
   }
 
   bounce(us, them) {
@@ -13,12 +15,13 @@ export default class Stomper extends Trait {
   }
 
   collides(us, them) {
-    if (!them.killable || them.killable.dead ) {
+    if (!them.killable || them.killable.dead) {
       return;
     }
 
     if (us.vel.y > them.vel.y) {
       this.bounce(us, them);
+      this.onStomp(us, them);
     }
   }
 }

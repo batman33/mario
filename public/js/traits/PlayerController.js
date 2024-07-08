@@ -15,6 +15,16 @@ export default class PlayerController extends Trait {
      * @type {Vec2}
      */
     this.checkPoint = new Vec2(0, 0);
+
+    /**
+     * @type {number}
+     */
+    this.time = 300;
+
+    /**
+     * @type {number}
+     */
+    this.score = 0;
   }
 
   /**
@@ -22,6 +32,10 @@ export default class PlayerController extends Trait {
    */
   setPlayer(entity) {
     this.player = entity;
+
+    this.player.stomper.onStomp = () => {
+      this.score += 100;
+    };
   }
 
   /**
@@ -34,6 +48,8 @@ export default class PlayerController extends Trait {
       this.player.killable.revive();
       this.player.pos.set(this.checkPoint.x, this.checkPoint.y);
       level.entities.add(this.player);
+    } else {
+      this.time -= deltaTime * 2;
     }
   }
 }
