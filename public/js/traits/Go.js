@@ -33,7 +33,7 @@ export default class Go extends Trait {
    * @param {Entity} entity
    * @param {number} deltaTime
    */
-  update(entity, deltaTime) {
+  update(entity, { deltaTime }) {
     const absX = Math.abs(entity.vel.x);
 
     if (this.direction !== 0) {

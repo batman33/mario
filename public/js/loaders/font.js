@@ -29,8 +29,6 @@ export function loadFont() {
     const size = 8;
     const rowLength = image.width;
 
-    console.log(rowLength);
-
     for (let [index, char] of [...CHARS].entries()) {
       const x = (index * size) % rowLength;
       const y = Math.floor((index * size) / rowLength) * size;

@@ -1,4 +1,6 @@
+import AudioBoard from "../AudioBoard.js";
 import Entity, { Sides, Trait } from "../Entity.js";
+import Level from "../Level.js";
 
 export default class Jump extends Trait {
   constructor() {
@@ -62,10 +64,13 @@ export default class Jump extends Trait {
   /**
    * @param {Entity} entity
    * @param {number} deltaTime
+   * @param {Level} level
+   * @param {AudioBoard} audioBoard
    */
-  update(entity, deltaTime) {
+  update(entity, { deltaTime }) {
     if (this.requestTime > 0) {
       if (this.ready > 0) {
+        this.sounds.add("jump");
         this.engageTime = this.duration;
         this.requestTime = 0;
       }
