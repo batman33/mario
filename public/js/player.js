@@ -15,7 +15,6 @@ export function createPlayerEnvironment(playerEntity) {
 }
 
 export function createPlayer(entity) {
-  console.log(entity);
   entity.addTrait(new Player());
 
   return entity;

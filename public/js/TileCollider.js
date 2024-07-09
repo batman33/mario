@@ -1,21 +1,30 @@
-import Entity, { Sides } from "./Entity.js";
+import Entity from "./Entity.js";
 import TileResolver from "./TileResolver.js";
+import { Matrix } from "./math.js";
+import { brick } from "./tiles/brick.js";
+import { ground } from "./tiles/ground.js";
+
+const handlers = { ground, brick };
 
 export default class TileCollider {
-  /**
-   * @param {[][]} tileMatrix
-   */
-  constructor(tileMatrix) {
+  constructor() {
     /**
-     * @type {TileResolver}
+     * @type {TileResolver[]}
      */
-    this.tiles = new TileResolver(tileMatrix);
+    this.resolvers = [];
+  }
+
+  /**
+   * @param {Matrix} tileMatrix
+   */
+  addGrid(tileMatrix) {
+    this.resolvers.push(new TileResolver(tileMatrix));
   }
 
   /**
    * @param {Entity} entity
    */
-  checkX(entity) {
+  checkX(entity, gameContext, level) {
     let x;
     if (entity.vel.x > 0) {
       x = entity.bounds.right;
@@ -25,29 +34,16 @@ export default class TileCollider {
       return;
     }
 
-    const matches = this.tiles.searchByRange(x, x, entity.bounds.top, entity.bounds.bottom);
-
-    matches.forEach((match) => {
-      if (match.tile.type !== "ground") {
-        return;
-      }
-
-      if (entity.vel.x > 0) {
-        if (entity.bounds.right > match.x1) {
-          entity.obstruct(Sides.RIGHT, match);
-        }
-      } else if (entity.vel.x < 0) {
-        if (entity.bounds.left < match.x2) {
-          entity.obstruct(Sides.LEFT, match);
-        }
-      }
-    });
+    for (const resolver of this.resolvers) {
+      const matches = resolver.searchByRange(x, x, entity.bounds.top, entity.bounds.bottom);
+      matches.forEach((match) => this.handle(0, { entity, match, resolver, gameContext, level }));
+    }
   }
 
   /**
    * @param {Entity} entity
    */
-  checkY(entity) {
+  checkY(entity, gameContext, level) {
     let y;
     if (entity.vel.y > 0) {
       y = entity.bounds.bottom;
@@ -57,22 +53,16 @@ export default class TileCollider {
       return;
     }
 
-    const matches = this.tiles.searchByRange(entity.bounds.left, entity.bounds.right, y, y);
+    for (const resolver of this.resolvers) {
+      const matches = resolver.searchByRange(entity.bounds.left, entity.bounds.right, y, y);
+      matches.forEach((match) => this.handle(1, { entity, match, resolver, gameContext, level }));
+    }
+  }
 
-    matches.forEach((match) => {
-      if (match.tile.type !== "ground") {
-        return;
-      }
-
-      if (entity.vel.y > 0) {
-        if (entity.bounds.bottom > match.y1) {
-          entity.obstruct(Sides.BOTTOM, match);
-        }
-      } else if (entity.vel.y < 0) {
-        if (entity.bounds.top < match.y2) {
-          entity.obstruct(Sides.TOP, match);
-        }
-      }
-    });
+  handle(index, params) {
+    const handler = handlers[params.match.tile.type];
+    if (handler) {
+      handler[index](params);
+    }
   }
 }

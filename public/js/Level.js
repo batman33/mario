@@ -34,11 +34,7 @@ export default class Level {
      * @type {TileCollider}
      * @public
      */
-    this.tileCollider = null;
-  }
-
-  setCollisionGrid(matrix) {
-    this.tileCollider = new TileCollider(matrix);
+    this.tileCollider = new TileCollider();
   }
 
   update(gameContext) {
