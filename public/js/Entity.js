@@ -22,8 +22,6 @@ export class Trait {
     this.tasks = [];
 
     this.events = new EventEmitter();
-
-    this.sounds = new Set();
   }
 
   finalize() {
@@ -46,14 +44,6 @@ export class Trait {
    * @param {Entity} them
    */
   collides(us, them) {}
-
-  playSounds(audioBoard, audioContext) {
-    this.sounds.forEach((name) => {
-      audioBoard.playAudio(name, audioContext);
-    });
-
-    this.sounds.clear();
-  }
 
   update() {}
 }
@@ -92,6 +82,8 @@ export default class Entity {
      * @type {Trait}
      */
     this.traits = [];
+
+    this.sounds = new Set();
   }
 
   /**
@@ -122,14 +114,24 @@ export default class Entity {
     });
   }
 
+  playSounds(audioBoard, audioContext) {
+    this.sounds.forEach((name) => {
+      audioBoard.playAudio(name, audioContext);
+    });
+
+    this.sounds.clear();
+  }
+
   /**
    * @param {number} deltaTime
    */
   update(gameContext, level) {
     this.traits.forEach((trait) => {
       trait.update(this, gameContext, level);
-      trait.playSounds(this.audio, gameContext.audioContext);
     });
+
+    this.playSounds(this.audio, gameContext.audioContext);
+
     this.lifeTime += gameContext.deltaTime;
   }
 }

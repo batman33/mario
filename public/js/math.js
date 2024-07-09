@@ -43,6 +43,14 @@ export class Vec2 {
   }
 
   /**
+   * @param {Vec2} vec2
+   */
+  copy(vec2) {
+    this.x = vec2.x;
+    this.y = vec2.y;
+  }
+
+  /**
    * @param {number} x
    * @param {number} y
    */

@@ -1,25 +1,12 @@
 import Camera from "./Camera.js";
-import Entity from "./Entity.js";
-import PlayerController from "./traits/PlayerController.js";
 import Timer from "./Timer.js";
 import { createCollisionLayer } from "./layers/collision.js";
 import { createDashboardLayer } from "./layers/dashboard.js";
 import { createLevelLoader } from "./loaders/level.js";
+import { createPlayerEnvironment, createPlayer } from "./player.js";
 import { loadEntities } from "./entities.js";
 import { loadFont } from "./loaders/font.js";
 import { setupKeyboard } from "./input.js";
-
-function createPlayerEnvironment(playerEntity) {
-  const playerEnvironment = new Entity();
-  const playerController = new PlayerController();
-
-  playerController.checkPoint.set(64, 64);
-
-  playerController.setPlayer(playerEntity);
-  playerEnvironment.addTrait(playerController);
-
-  return playerEnvironment;
-}
 
 async function main(canvas) {
   /**
@@ -38,7 +25,8 @@ async function main(canvas) {
 
   const camera = new Camera();
 
-  const mario = entityFactory.mario();
+  const mario = createPlayer(entityFactory.mario());
+
   const playerEnvironment = createPlayerEnvironment(mario);
   level.entities.add(playerEnvironment);
 
