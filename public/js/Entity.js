@@ -1,5 +1,6 @@
 import AudioBoard from "./AudioBoard.js";
 import BoundingBox from "./BoundingBox.js";
+import EventEmitter from "./EventEmitter.js";
 import { Vec2 } from "./math.js";
 
 export const Sides = {
@@ -19,6 +20,8 @@ export class Trait {
      * @type {[]}
      */
     this.tasks = [];
+
+    this.events = new EventEmitter();
 
     this.sounds = new Set();
   }
