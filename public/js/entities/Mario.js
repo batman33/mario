@@ -6,7 +6,7 @@ import Physics from "../traits/Physics.js";
 import Solid from "../traits/Solid.js";
 import Stomper from "../traits/Stomper.js";
 import { loadAudioBoard } from "../loaders/audio.js";
-import { loadSpriteSheet } from "../loaders.js";
+import { loadSpriteSheet } from "../loaders/sprite.js";
 
 const SLOW_DRAG = 1 / 1000;
 const FAST_DRAG = 1 / 5000;
@@ -44,7 +44,7 @@ function createMarioFactory(sprite, audio) {
 
   return function createMario() {
     const mario = new Entity();
-    mario.audio = audio; 
+    mario.audio = audio;
     mario.size.set(14, 16);
 
     mario.addTrait(new Physics());
