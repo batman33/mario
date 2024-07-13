@@ -1,6 +1,6 @@
 import AudioBoard from "./AudioBoard.js";
 import BoundingBox from "./BoundingBox.js";
-import EventEmitter from "./EventEmitter.js";
+import EventBuffer from "./EventBuffer.js";
 import { Vec2 } from "./math.js";
 
 export const Sides = {
@@ -11,26 +11,30 @@ export const Sides = {
 };
 
 export class Trait {
+  static EVENT_TASK = Symbol("task");
+
   constructor(name) {
     /**
      * @type {string}
      */
     this.NAME = name;
-    /**
-     * @type {[]}
-     */
-    this.tasks = [];
 
-    this.events = new EventEmitter();
+    this.listeners = [];
   }
 
-  finalize() {
-    this.tasks.forEach((task) => task());
-    this.tasks.length = 0;
+  listen(name, callback, count = Infinity) {
+    this.listeners.push({ name, callback, count });
+  }
+
+  finalize(entity) {
+    this.listeners = this.listeners.filter((listener) => {
+      entity.events.process(listener.name, listener.callback);
+      return --listener.count;
+    });
   }
 
   queue(task) {
-    this.tasks.push(task);
+    this.listen(Trait.EVENT_TASK, task, 1);
   }
 
   /**
@@ -84,6 +88,8 @@ export default class Entity {
     this.traits = [];
 
     this.sounds = new Set();
+
+    this.events = new EventBuffer();
   }
 
   /**
@@ -109,9 +115,13 @@ export default class Entity {
   draw() {}
 
   finalize() {
+    this.events.emit(Trait.EVENT_TASK);
+
     this.traits.forEach((trait) => {
-      trait.finalize();
+      trait.finalize(this);
     });
+
+    this.events.clear();
   }
 
   playSounds(audioBoard, audioContext) {

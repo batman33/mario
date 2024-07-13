@@ -1,8 +1,8 @@
-import { loadMario } from "./entities/Mario.js";
-import { loadGoomba } from "./entities/Goomba.js";
-import { loadKoopa } from "./entities/Koopa.js";
 import { loadBullet } from "./entities/Bullet.js";
 import { loadCannon } from "./entities/Cannon.js";
+import { loadGoomba } from "./entities/Goomba.js";
+import { loadKoopa } from "./entities/Koopa.js";
+import { loadMario } from "./entities/Mario.js";
 
 export function loadEntities(audioContext) {
   const entityFactories = {};

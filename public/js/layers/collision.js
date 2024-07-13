@@ -1,5 +1,5 @@
-import Level from "../Level.js";
 import Camera from "../Camera.js";
+import Level from "../Level.js";
 
 function createEntityLayer(entities) {
   return function drawBoundingBox(context, camera) {
