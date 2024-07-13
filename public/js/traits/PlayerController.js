@@ -1,6 +1,5 @@
 import Entity, { Trait } from "../Entity.js";
 import Level from "../Level.js";
-import Stomper from "./Stomper.js";
 import { Vec2 } from "../math.js";
 
 export default class PlayerController extends Trait {
@@ -16,20 +15,6 @@ export default class PlayerController extends Trait {
      * @type {Vec2}
      */
     this.checkPoint = new Vec2(0, 0);
-
-    /**
-     * @type {number}
-     */
-    this.time = 300;
-
-    /**
-     * @type {number}
-     */
-    this.score = 0;
-
-    this.listen(Stomper.EVENT_STOMP, () => {
-      this.score += 100;
-    });
   }
 
   /**
@@ -49,8 +34,6 @@ export default class PlayerController extends Trait {
       this.player.killable.revive();
       this.player.pos.set(this.checkPoint.x, this.checkPoint.y);
       level.entities.add(this.player);
-    } else {
-      this.time -= deltaTime * 2;
     }
   }
 }

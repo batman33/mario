@@ -21,17 +21,20 @@ async function main(canvas) {
   const [entityFactory, font] = await Promise.all([loadEntities(audioContext), loadFont()]);
 
   const loadLevel = await createLevelLoader(entityFactory);
+
   const level = await loadLevel("1-1");
 
   const camera = new Camera();
 
   const mario = createPlayer(entityFactory.mario());
+  mario.player.name = "MARIO";
+  level.entities.add(mario);
 
   const playerEnvironment = createPlayerEnvironment(mario);
   level.entities.add(playerEnvironment);
 
   level.compositor.layers.push(createCollisionLayer(level));
-  level.compositor.layers.push(createDashboardLayer(font, playerEnvironment));
+  level.compositor.layers.push(createDashboardLayer(font, level));
 
   const input = setupKeyboard(mario);
   input.listenTo(window);
@@ -54,8 +57,6 @@ async function main(canvas) {
   };
 
   timer.start();
-
-  level.music.player.playTrack("main");
 }
 
 /**

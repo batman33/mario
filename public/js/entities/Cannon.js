@@ -14,7 +14,7 @@ export function loadCannon(audioContext, entityFactory) {
 function createCannonFactory(audio, entityFactory) {
   function emitBullet(cannon, level) {
     let dir = 1;
-    for (const player of findPlayers(level.entities)) {
+    for (const player of findPlayers(level)) {
       if (player.pos.x > cannon.pos.x - HOLD_FIRE_THRESHOLD && player.pos.x < cannon.pos.x + HOLD_FIRE_THRESHOLD) {
         return;
       }

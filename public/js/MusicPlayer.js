@@ -20,9 +20,15 @@ export default class MusicPlayer {
   }
 
   playTrack(name) {
+    for (const audio of this.tracks.values()) {
+      audio.pause();
+    }
+
     const audio = this.tracks.get(name);
     if (audio) {
       audio.play();
     }
+
+    return audio;
   }
 }

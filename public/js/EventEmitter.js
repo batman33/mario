@@ -4,8 +4,7 @@ export default class EventEmitter {
   }
 
   listen(name, callback) {
-    const listener = { name, callback };
-    this.listeners.push(listener);
+    this.listeners.push({ name, callback });
   }
 
   emit(name, ...args) {

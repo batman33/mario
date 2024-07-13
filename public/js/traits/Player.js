@@ -5,6 +5,8 @@ export default class Player extends Trait {
   constructor() {
     super("player");
 
+    this.name = "UNNAMED";
+
     this.lives = 3;
     this.coins = 0;
     this.score = 0;

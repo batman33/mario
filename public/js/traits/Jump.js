@@ -67,7 +67,7 @@ export default class Jump extends Trait {
    * @param {Level} level
    * @param {AudioBoard} audioBoard
    */
-  update(entity, { deltaTime }) {
+  update(entity, { deltaTime }, level) {
     if (this.requestTime > 0) {
       if (this.ready > 0) {
         entity.sounds.add("jump");
