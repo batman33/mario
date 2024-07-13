@@ -2,6 +2,9 @@ import MusicPlayer from "./MusicPlayer.js";
 
 export default class MusicController {
   constructor() {
+    /**
+     * @type {MusicPlayer}
+     */
     this.player = undefined;
   }
 
@@ -27,5 +30,9 @@ export default class MusicController {
       },
       { once: true }
     );
+  }
+
+  pause() {
+    this.player.pauseAll();
   }
 }

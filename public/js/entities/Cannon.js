@@ -5,14 +5,14 @@ import { loadAudioBoard } from "../loaders/audio.js";
 
 const HOLD_FIRE_THRESHOLD = 30;
 
-export function loadCannon(audioContext, entityFactory) {
+export function loadCannon(audioContext) {
   return loadAudioBoard("cannon", audioContext).then((audio) => {
-    return createCannonFactory(audio, entityFactory);
+    return createCannonFactory(audio);
   });
 }
 
-function createCannonFactory(audio, entityFactory) {
-  function emitBullet(cannon, level) {
+function createCannonFactory(audio) {
+  function emitBullet(cannon, gameContext, level) {
     let dir = 1;
     for (const player of findPlayers(level)) {
       if (player.pos.x > cannon.pos.x - HOLD_FIRE_THRESHOLD && player.pos.x < cannon.pos.x + HOLD_FIRE_THRESHOLD) {
@@ -24,7 +24,7 @@ function createCannonFactory(audio, entityFactory) {
       }
     }
 
-    const bullet = entityFactory.bullet();
+    const bullet = gameContext.entityFactory.bullet();
 
     bullet.pos.copy(cannon.pos);
     bullet.vel.set(80 * dir, 0);
