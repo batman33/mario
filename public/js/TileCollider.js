@@ -2,9 +2,10 @@ import Entity from "./Entity.js";
 import TileResolver from "./TileResolver.js";
 import { Matrix } from "./math.js";
 import { brick } from "./tiles/brick.js";
+import { coin } from "./tiles/coin.js";
 import { ground } from "./tiles/ground.js";
 
-const handlers = { ground, brick };
+const handlers = { ground, brick, coin };
 
 export default class TileCollider {
   constructor() {
