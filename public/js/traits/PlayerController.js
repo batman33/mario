@@ -1,10 +1,11 @@
-import Entity, { Trait } from "../Entity.js";
+import Entity from "../Entity.js";
 import Level from "../Level.js";
+import Trait from "../Trait.js";
 import { Vec2 } from "../math.js";
 
 export default class PlayerController extends Trait {
   constructor() {
-    super("playerController");
+    super();
 
     /**
      * @type {Entity?}

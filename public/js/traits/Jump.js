@@ -1,10 +1,11 @@
 import AudioBoard from "../AudioBoard.js";
-import Entity, { Sides, Trait } from "../Entity.js";
+import Entity, { Sides } from "../Entity.js";
 import Level from "../Level.js";
+import Trait from "../Trait.js";
 
 export default class Jump extends Trait {
   constructor() {
-    super("jump");
+    super();
 
     /**
      * @type {number}

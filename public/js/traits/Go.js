@@ -1,8 +1,10 @@
-import Entity, { Trait } from "../Entity.js";
+import Entity from "../Entity.js";
+import Trait from "../Trait.js";
 
 export default class Go extends Trait {
   constructor() {
-    super("go");
+    super();
+
     /**
      * @type {number}
      */
