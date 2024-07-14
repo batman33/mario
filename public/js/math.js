@@ -1,8 +1,5 @@
 export class Matrix {
   constructor() {
-    /**
-     * @type {[][]}
-     */
     this.grid = [];
   }
 
@@ -16,7 +13,6 @@ export class Matrix {
 
   delete(x, y) {
     const col = this.grid[x];
-
     if (col) {
       delete col[y];
     }
@@ -24,11 +20,9 @@ export class Matrix {
 
   get(x, y) {
     const col = this.grid[x];
-
     if (col) {
       return col[y];
     }
-
     return undefined;
   }
 
@@ -42,34 +36,44 @@ export class Matrix {
 }
 
 export class Vec2 {
-  /**
-   * @param {number} x
-   * @param {number} y
-   */
   constructor(x, y) {
     this.set(x, y);
   }
 
-  /**
-   * @param {Vec2} vec2
-   */
   copy(vec2) {
     this.x = vec2.x;
     this.y = vec2.y;
   }
 
-  /**
-   * @param {number} x
-   * @param {number} y
-   */
+  equals(vec2) {
+    return this.x === vec2.x && this.y === vec2.y;
+  }
+
+  distance(v) {
+    const dx = this.x - v.x,
+      dy = this.y - v.y;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
   set(x, y) {
-    /**
-     * @type {number}
-     */
     this.x = x;
-    /**
-     * @type {number}
-     */
     this.y = y;
   }
 }
+
+export function clamp(value, min, max) {
+  if (value > max) {
+    return max;
+  }
+  if (value < min) {
+    return min;
+  }
+  return value;
+}
+
+export const Direction = {
+  UP: new Vec2(0, -1),
+  DOWN: new Vec2(0, 1),
+  RIGHT: new Vec2(1, 0),
+  LEFT: new Vec2(-1, 0),
+};

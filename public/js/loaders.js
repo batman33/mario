@@ -1,7 +1,3 @@
-/**
- * @param {string} url
- * @returns {Promise<Image>}
- */
 export function loadImage(url) {
   return new Promise((resolve) => {
     const image = new Image();

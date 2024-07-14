@@ -1,16 +1,8 @@
-import MusicPlayer from "./MusicPlayer.js";
-
 export default class MusicController {
   constructor() {
-    /**
-     * @type {MusicPlayer}
-     */
-    this.player = undefined;
+    this.player = null;
   }
 
-  /**
-   * @param {MusicPlayer} player
-   */
   setPlayer(player) {
     this.player = player;
   }

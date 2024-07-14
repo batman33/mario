@@ -1,17 +1,11 @@
 export function createTextLayer(font, text) {
   const size = font.size;
-
-  /**
-   * @param {CanvasRenderingContext2D} context
-   */
   return function drawText(context) {
-    const textWidth = text.length;
-    const screenWidth = Math.floor(context.canvas.width / size);
-    const screenHeight = Math.floor(context.canvas.height / size);
-
-    const x = screenWidth / 2 - textWidth / 2;
-    const y = screenHeight / 2;
-
+    const textW = text.length;
+    const screenW = Math.floor(context.canvas.width / size);
+    const screenH = Math.floor(context.canvas.height / size);
+    const x = screenW / 2 - textW / 2;
+    const y = screenH / 2;
     font.print(text, context, x * size, y * size);
   };
 }

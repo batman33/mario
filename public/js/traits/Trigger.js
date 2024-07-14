@@ -3,7 +3,6 @@ import Trait from "../Trait.js";
 export default class Trigger extends Trait {
   constructor() {
     super();
-
     this.touches = new Set();
     this.conditions = [];
   }
@@ -17,7 +16,6 @@ export default class Trigger extends Trait {
       for (const condition of this.conditions) {
         condition(entity, this.touches, gameContext, level);
       }
-
       this.touches.clear();
     }
   }

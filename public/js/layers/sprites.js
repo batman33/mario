@@ -1,8 +1,3 @@
-import Entity from "../Entity.js";
-
-/**
- * @param {Set<Entity>} entities
- */
 export function createSpriteLayer(entities, width = 64, height = 64) {
   const spriteBuffer = document.createElement("canvas");
   spriteBuffer.width = width;
@@ -11,6 +6,10 @@ export function createSpriteLayer(entities, width = 64, height = 64) {
 
   return function drawSpriteLayer(context, camera) {
     entities.forEach((entity) => {
+      if (!entity.draw) {
+        return;
+      }
+
       spriteBufferContext.clearRect(0, 0, width, height);
 
       entity.draw(spriteBufferContext);

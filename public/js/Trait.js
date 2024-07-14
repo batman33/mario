@@ -6,7 +6,8 @@ export default class Trait {
   }
 
   listen(name, callback, count = Infinity) {
-    this.listeners.push({ name, callback, count });
+    const listener = { name, callback, count };
+    this.listeners.push(listener);
   }
 
   finalize(entity) {
@@ -20,17 +21,9 @@ export default class Trait {
     this.listen(Trait.EVENT_TASK, task, 1);
   }
 
-  /**
-   * @param {Entity} entity
-   * @param {"bottom"|"top"|"left"|"right"} side
-   */
-  obstruct(entity, side) {}
-
-  /**
-   * @param {Entity} us
-   * @param {Entity} them
-   */
   collides(us, them) {}
+
+  obstruct() {}
 
   update() {}
 }

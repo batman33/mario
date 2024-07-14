@@ -3,7 +3,6 @@ import Trait from "../Trait.js";
 export default class Physics extends Trait {
   update(entity, gameContext, level) {
     const { deltaTime } = gameContext;
-
     entity.pos.x += entity.vel.x * deltaTime;
     level.tileCollider.checkX(entity, gameContext, level);
 

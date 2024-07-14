@@ -4,56 +4,52 @@ import EventBuffer from "./EventBuffer.js";
 import Trait from "./Trait.js";
 import { Vec2 } from "./math.js";
 
+export const Align = {
+  center(target, subject) {
+    subject.bounds.setCenter(target.bounds.getCenter());
+  },
+
+  bottom(target, subject) {
+    subject.bounds.bottom = target.bounds.bottom;
+  },
+
+  top(target, subject) {
+    subject.bounds.top = target.bounds.top;
+  },
+
+  left(target, subject) {
+    subject.bounds.left = target.bounds.left;
+  },
+
+  right(target, subject) {
+    subject.bounds.right = target.bounds.right;
+  },
+};
+
 export const Sides = {
-  BOTTOM: Symbol("bottom"),
   TOP: Symbol("top"),
+  BOTTOM: Symbol("bottom"),
   LEFT: Symbol("left"),
   RIGHT: Symbol("right"),
 };
 
 export default class Entity {
   constructor() {
-    /**
-     * @type {AudioBoard}
-     */
+    this.id = null;
     this.audio = new AudioBoard();
-    /**
-     * @type {Vec2}
-     */
-    this.pos = new Vec2(0, 0);
-    /**
-     * @type {Vec2}
-     */
-    this.vel = new Vec2(0, 0);
-    /**
-     * @type {Vec2}
-     */
-    this.size = new Vec2(0, 0);
-    /**
-     * @type {Vec2}
-     */
-    this.offset = new Vec2(0, 0);
-    /**
-     * @type {Number}
-     */
-    this.lifeTime = 0;
-    /**
-     * @type {BoundingBox}
-     */
-    this.bounds = new BoundingBox(this.pos, this.size, this.offset);
-    /**
-     * @type {Map<Class, Trait>}
-     */
-    this.traits = new Map();
-
+    this.events = new EventBuffer();
     this.sounds = new Set();
 
-    this.events = new EventBuffer();
+    this.pos = new Vec2(0, 0);
+    this.vel = new Vec2(0, 0);
+    this.size = new Vec2(0, 0);
+    this.offset = new Vec2(0, 0);
+    this.bounds = new BoundingBox(this.pos, this.size, this.offset);
+    this.lifetime = 0;
+
+    this.traits = new Map();
   }
 
-  /**
-   * @param {Trait} trait
-   */
   addTrait(trait) {
     this.traits.set(trait.constructor, trait);
   }
@@ -69,8 +65,6 @@ export default class Entity {
       trait.obstruct(this, side, match);
     });
   }
-
-  draw() {}
 
   finalize() {
     this.events.emit(Trait.EVENT_TASK, this);
@@ -90,9 +84,6 @@ export default class Entity {
     this.sounds.clear();
   }
 
-  /**
-   * @param {number} deltaTime
-   */
   update(gameContext, level) {
     this.traits.forEach((trait) => {
       trait.update(this, gameContext, level);
@@ -100,6 +91,6 @@ export default class Entity {
 
     this.playSounds(this.audio, gameContext.audioContext);
 
-    this.lifeTime += gameContext.deltaTime;
+    this.lifetime += gameContext.deltaTime;
   }
 }

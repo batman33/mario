@@ -3,9 +3,8 @@ import Trait from "../Trait.js";
 export default class Killable extends Trait {
   constructor() {
     super();
-
     this.dead = false;
-    this.deltaTime = 0;
+    this.deadTime = 0;
     this.removeAfter = 2;
   }
 
@@ -15,14 +14,13 @@ export default class Killable extends Trait {
 
   revive() {
     this.dead = false;
-    this.deltaTime = 0;
+    this.deadTime = 0;
   }
 
   update(entity, { deltaTime }, level) {
     if (this.dead) {
-      this.deltaTime += deltaTime;
-
-      if (this.deltaTime > this.removeAfter) {
+      this.deadTime += deltaTime;
+      if (this.deadTime > this.removeAfter) {
         this.queue(() => {
           level.entities.delete(entity);
         });

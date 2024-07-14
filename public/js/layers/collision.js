@@ -1,6 +1,3 @@
-import Camera from "../Camera.js";
-import Level from "../Level.js";
-
 function createEntityLayer(entities) {
   return function drawBoundingBox(context, camera) {
     context.strokeStyle = "red";
@@ -35,17 +32,10 @@ function createTileCandidateLayer(tileResolver) {
   };
 }
 
-/**
- * @param {Level} level
- */
 export function createCollisionLayer(level) {
   const drawTileCandidates = level.tileCollider.resolvers.map(createTileCandidateLayer);
   const drawBoundingBoxes = createEntityLayer(level.entities);
 
-  /**
-   * @param {CanvasRenderingContext2D} context
-   * @param {Camera} context
-   */
   return function drawCollision(context, camera) {
     drawTileCandidates.forEach((draw) => draw(context, camera));
     drawBoundingBoxes(context, camera);

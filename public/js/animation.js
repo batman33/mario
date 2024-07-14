@@ -1,11 +1,11 @@
 /**
  * @param {string[]} frames
- * @param {number} frameLength
+ * @param {number} frameLen
  * @returns {function(number): string}
  */
-export function createAnimation(frames, frameLength) {
+export function createAnimation(frames, frameLen) {
   return function resolveFrame(distance) {
-    const frameIndex = Math.floor(distance / frameLength) % frames.length;
+    const frameIndex = Math.floor(distance / frameLen) % frames.length;
     const frameName = frames[frameIndex];
     return frameName;
   };

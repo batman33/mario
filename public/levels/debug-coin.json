@@ -1,19 +1,19 @@
 {
   "spriteSheet": "overworld",
   "musicSheet": "silent",
-
   "patternSheet": "overworld-pattern",
+  "checkpoints": [[40, 192]],
 
   "layers": [
     {
       "tiles": [
         {
-          "name": "sky",
+          "style": "sky",
           "ranges": [[0, 212, 0, 13]]
         },
         {
-          "name": "ground",
-          "type": "ground",
+          "style": "ground",
+          "behavior": "ground",
           "ranges": [[0, 212, 13, 2]]
         }
       ]
@@ -21,9 +21,9 @@
     {
       "tiles": [
         {
-          "name": "coin",
-          "type": "coin",
-          "ranges": [[6, 100, 8, 4]]
+          "style": "coin",
+          "behavior": "coin",
+          "ranges": [[6, 100, 8, 5]]
         }
       ]
     }

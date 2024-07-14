@@ -1,23 +1,9 @@
-import { Matrix } from "./math.js";
-
-/**
- * A number, or a string containing a number.
- * @typedef {{tile: {name: string}, x1: number, x2: number , y1: number, y2: number }} TypeMatchTile
- */
-
 export default class TileResolver {
   constructor(matrix, tileSize = 16) {
-    /**
-     * @type {Matrix}
-     */
     this.matrix = matrix;
     this.tileSize = tileSize;
   }
 
-  /**
-   * @param {number} pos
-   * @returns {number}
-   */
   toIndex(pos) {
     return Math.floor(pos / this.tileSize);
   }
@@ -26,20 +12,13 @@ export default class TileResolver {
     const pMax = Math.ceil(pos2 / this.tileSize) * this.tileSize;
     const range = [];
     let pos = pos1;
-
     do {
       range.push(this.toIndex(pos));
       pos += this.tileSize;
     } while (pos < pMax);
-
     return range;
   }
 
-  /**
-   * @param {number} indexX
-   * @param {number} indexY
-   * @returns {TypeMatchTile}
-   */
   getByIndex(indexX, indexY) {
     const tile = this.matrix.get(indexX, indexY);
     if (tile) {
@@ -59,22 +38,10 @@ export default class TileResolver {
     }
   }
 
-  /**
-   * @param {number} posX
-   * @param {number} posY
-   * @returns {TypeMatchTile}
-   */
   searchByPosition(posX, posY) {
     return this.getByIndex(this.toIndex(posX), this.toIndex(posY));
   }
 
-  /**
-   * @param {number} x1
-   * @param {number} x2
-   * @param {number} y1
-   * @param {number} y2
-   * @returns {TypeMatchTile[]}
-   */
   searchByRange(x1, x2, y1, y2) {
     const matches = [];
     this.toIndexRange(x1, x2).forEach((indexX) => {
@@ -85,7 +52,6 @@ export default class TileResolver {
         }
       });
     });
-
     return matches;
   }
 }

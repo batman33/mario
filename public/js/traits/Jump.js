@@ -1,39 +1,16 @@
-import AudioBoard from "../AudioBoard.js";
-import Entity, { Sides } from "../Entity.js";
-import Level from "../Level.js";
 import Trait from "../Trait.js";
+import { Sides } from "../Entity.js";
 
 export default class Jump extends Trait {
   constructor() {
     super();
 
-    /**
-     * @type {number}
-     */
     this.ready = 0;
-    /**
-     * @type {number}
-     */
     this.duration = 0.3;
-    /**
-     * @type {number}
-     */
     this.engageTime = 0;
-    /**
-     * @type {number}
-     */
     this.requestTime = 0;
-    /**
-     * @type {number}
-     */
     this.gracePeriod = 0.1;
-    /**
-     * @type {number}
-     */
-    this.speedBoots = 0.3;
-    /**
-     * @type {number}
-     */
+    this.speedBoost = 0.3;
     this.velocity = 200;
   }
 
@@ -50,10 +27,6 @@ export default class Jump extends Trait {
     this.requestTime = 0;
   }
 
-  /**
-   * @param {Entity} entity
-   * @param {"bottom"|"top"|"left"|"right"} side
-   */
   obstruct(entity, side) {
     if (side === Sides.BOTTOM) {
       this.ready = 1;
@@ -62,12 +35,6 @@ export default class Jump extends Trait {
     }
   }
 
-  /**
-   * @param {Entity} entity
-   * @param {number} deltaTime
-   * @param {Level} level
-   * @param {AudioBoard} audioBoard
-   */
   update(entity, { deltaTime }, level) {
     if (this.requestTime > 0) {
       if (this.ready > 0) {
@@ -80,7 +47,7 @@ export default class Jump extends Trait {
     }
 
     if (this.engageTime > 0) {
-      entity.vel.y = -(this.velocity + Math.abs(entity.vel.x) * this.speedBoots);
+      entity.vel.y = -(this.velocity + Math.abs(entity.vel.x) * this.speedBoost);
       this.engageTime -= deltaTime;
     }
 

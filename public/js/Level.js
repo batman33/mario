@@ -1,69 +1,53 @@
 import Camera from "./Camera.js";
-import Compositor from "./Compositor.js";
-import Entity from "./Entity.js";
 import EntityCollider from "./EntityCollider.js";
-import EventEmitter from "./EventEmitter.js";
 import MusicController from "./MusicController.js";
 import Scene from "./Scene.js";
 import TileCollider from "./TileCollider.js";
+import { clamp } from "./math.js";
 import { findPlayers } from "./player.js";
 
 function focusPlayer(level) {
   for (const player of findPlayers(level.entities)) {
-    level.camera.pos.x = Math.max(0, player.pos.x - 100);
+    level.camera.pos.x = clamp(player.pos.x - 100, level.camera.min.x, level.camera.max.x - level.camera.size.x);
+  }
+}
+
+class EntityCollection extends Set {
+  get(id) {
+    for (const entity of this) {
+      if (entity.id === id) {
+        return entity;
+      }
+    }
   }
 }
 
 export default class Level extends Scene {
   static EVENT_TRIGGER = Symbol("trigger");
+  static EVENT_COMPLETE = Symbol("complete");
 
   constructor() {
     super();
 
-    /**
-     * @type {string}
-     * @public
-     */
     this.name = "";
-    /**
-     * @type {number}
-     * @public
-     */
+
+    this.checkpoints = [];
+
     this.gravity = 1500;
-    /**
-     * @type {number}
-     * @public
-     */
     this.totalTime = 0;
-    /**
-     * @type {Camera}
-     * @public
-     */
+
     this.camera = new Camera();
-    /**
-     * @type {Set<Entity>}
-     * @public
-     */
-    this.entities = new Set();
-    /**
-     * @type {EntityCollider}
-     * @public
-     */
-    this.entityCollider = new EntityCollider(this.entities);
-    /**
-     * @type {TileCollider}
-     * @public
-     */
-    this.tileCollider = new TileCollider();
-    /**
-     * @type {MusicController}
-     * @public
-     */
+
     this.music = new MusicController();
+
+    this.entities = new EntityCollection();
+
+    this.entityCollider = new EntityCollider(this.entities);
+    this.tileCollider = new TileCollider();
   }
 
   draw(gameContext) {
-    this.compositor.draw(gameContext.videoContext, this.camera);
+    this.comp.draw(gameContext.videoContext, this.camera);
   }
 
   update(gameContext) {

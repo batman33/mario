@@ -5,21 +5,12 @@ export default class Scene {
   static EVENT_COMPLETE = Symbol("scene complete");
 
   constructor() {
-    /**
-     * @type {EventEmitter}
-     * @public
-     */
     this.events = new EventEmitter();
-
-    /**
-     * @type {Compositor}
-     * @public
-     */
-    this.compositor = new Compositor();
+    this.comp = new Compositor();
   }
 
   draw(gameContext) {
-    this.compositor.draw(gameContext.videoContext);
+    this.comp.draw(gameContext.videoContext);
   }
 
   update(gameContext) {}

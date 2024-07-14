@@ -3,6 +3,8 @@ import Go from "../traits/Go.js";
 import Jump from "../traits/Jump.js";
 import Killable from "../traits/Killable.js";
 import Physics from "../traits/Physics.js";
+import PipeTraveller from "../traits/PipeTraveller.js";
+import PoleTraveller from "../traits/PoleTraveller.js";
 import Solid from "../traits/Solid.js";
 import Stomper from "../traits/Stomper.js";
 import { loadAudioBoard } from "../loaders/audio.js";
@@ -18,22 +20,44 @@ export function loadMario(audioContext) {
 }
 
 function createMarioFactory(sprite, audio) {
-  const runAnimation = sprite.animations.get("run");
+  const runAnim = sprite.animations.get("run");
+  const climbAnim = sprite.animations.get("climb");
+
+  function getHeading(mario) {
+    const poleTraveller = mario.traits.get(PoleTraveller);
+    if (poleTraveller.distance) {
+      return false;
+    }
+    return mario.traits.get(Go).heading < 0;
+  }
 
   function routeFrame(mario) {
+    const pipeTraveller = mario.traits.get(PipeTraveller);
+    if (pipeTraveller.movement.x != 0) {
+      return runAnim(pipeTraveller.distance.x * 2);
+    }
+    if (pipeTraveller.movement.y != 0) {
+      return "idle";
+    }
+
+    const poleTraveller = mario.traits.get(PoleTraveller);
+    if (poleTraveller.distance) {
+      return climbAnim(poleTraveller.distance);
+    }
+
     if (mario.traits.get(Jump).falling) {
       return "jump";
     }
-    if (mario.traits.get(Go).distance > 0) {
-      if (
-        (mario.vel.x > 0 && mario.traits.get(Go).direction < 0) ||
-        (mario.vel.x < 0 && mario.traits.get(Go).direction > 0)
-      ) {
+
+    const go = mario.traits.get(Go);
+    if (go.distance > 0) {
+      if ((mario.vel.x > 0 && go.dir < 0) || (mario.vel.x < 0 && go.dir > 0)) {
         return "break";
       }
 
-      return runAnimation(mario.traits.get(Go).distance);
+      return runAnim(mario.traits.get(Go).distance);
     }
+
     return "idle";
   }
 
@@ -42,7 +66,7 @@ function createMarioFactory(sprite, audio) {
   }
 
   function drawMario(context) {
-    sprite.draw(routeFrame(this), context, 0, 0, this.traits.get(Go).heading < 0);
+    sprite.draw(routeFrame(this), context, 0, 0, getHeading(this));
   }
 
   return function createMario() {
@@ -56,8 +80,11 @@ function createMarioFactory(sprite, audio) {
     mario.addTrait(new Jump());
     mario.addTrait(new Killable());
     mario.addTrait(new Stomper());
+    mario.addTrait(new PipeTraveller());
+    mario.addTrait(new PoleTraveller());
 
-    mario.traits.get(Killable).removeAfter = 0;
+    mario.traits.get(Killable).removeAfter = Infinity;
+    mario.traits.get(Jump).velocity = 175;
 
     mario.turbo = setTurboState;
     mario.draw = drawMario;

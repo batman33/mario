@@ -1,15 +1,16 @@
 import SpriteSheet from "../SpriteSheet.js";
-import { createAnimation } from "../animation.js";
+import { createAnim } from "../anim.js";
 import { loadJSON, loadImage } from "../loaders.js";
 
 export function loadSpriteSheet(name) {
-  return loadJSON(`/sprites/${name}.json`).then((sheetSpec) =>
-    Promise.all([sheetSpec, loadImage(sheetSpec.imageURL)]).then(([sheetSpec, image]) => {
+  return loadJSON(`/sprites/${name}.json`)
+    .then((sheetSpec) => Promise.all([sheetSpec, loadImage(sheetSpec.imageURL)]))
+    .then(([sheetSpec, image]) => {
       const sprites = new SpriteSheet(image, sheetSpec.tileW, sheetSpec.tileH);
 
       if (sheetSpec.tiles) {
         sheetSpec.tiles.forEach((tileSpec) => {
-          sprites.defineTile(tileSpec.name, ...tileSpec.index);
+          sprites.defineTile(tileSpec.name, tileSpec.index[0], tileSpec.index[1]);
         });
       }
 
@@ -20,13 +21,12 @@ export function loadSpriteSheet(name) {
       }
 
       if (sheetSpec.animations) {
-        sheetSpec.animations.forEach((animationSpec) => {
-          const animation = createAnimation(animationSpec.frames, animationSpec.frameLength);
-          sprites.defineAnimation(animationSpec.name, animation);
+        sheetSpec.animations.forEach((animSpec) => {
+          const animation = createAnim(animSpec.frames, animSpec.frameLen);
+          sprites.defineAnim(animSpec.name, animation);
         });
       }
 
       return sprites;
-    })
-  );
+    });
 }

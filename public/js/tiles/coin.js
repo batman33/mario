@@ -1,7 +1,11 @@
+import Player from "../traits/Player.js";
+
 function handle({ entity, match, resolver }) {
-  if (entity.player) {
-    entity.player.addCoins(1);
-    resolver.matrix.delete(match.indexX, match.indexY);
+  const player = entity.traits.get(Player);
+  if (player) {
+    player.addCoins(1);
+    const grid = resolver.matrix;
+    grid.delete(match.indexX, match.indexY);
   }
 }
 

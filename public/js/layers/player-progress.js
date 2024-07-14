@@ -15,19 +15,15 @@ export function createPlayerProgressLayer(font, level) {
   spriteBuffer.height = 32;
   const spriteBufferContext = spriteBuffer.getContext("2d");
 
-  /**
-   * @param {CanvasRenderingContext2D} context
-   */
   return function drawPlayerProgress(context) {
     const entity = getPlayer(level.entities);
     const player = entity.traits.get(Player);
+    font.print("WORLD " + level.name, context, size * 12, size * 12);
 
-    font.print(`WORLD ${level.name}`, context, size * 12, size * 12);
-
-    font.print(`x ${player.lives.toString().padStart(3, " ")}`, context, size * 16, size * 16);
+    font.print("×" + player.lives.toString().padStart(3, " "), context, size * 16, size * 16);
 
     spriteBufferContext.clearRect(0, 0, spriteBuffer.width, spriteBuffer.height);
     entity.draw(spriteBufferContext);
-    context.drawImage(spriteBuffer, size * 12, size * 15);
+    context.drawImage(spriteBuffer, size * 13, size * 15);
   };
 }

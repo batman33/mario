@@ -35,16 +35,12 @@ function createCannonFactory(audio) {
 
   return function createCannon() {
     const cannon = new Entity();
-
     cannon.audio = audio;
 
     const emitter = new Emitter();
-
     emitter.interval = 4;
     emitter.emitters.push(emitBullet);
-
     cannon.addTrait(emitter);
-
     return cannon;
   };
 }

@@ -1,16 +1,16 @@
 export default class AudioBoard {
   constructor() {
-    this.buffer = new Map();
+    this.buffers = new Map();
   }
 
   addAudio(name, buffer) {
-    this.buffer.set(name, buffer);
+    this.buffers.set(name, buffer);
   }
 
-  playAudio(name, audioContext) {
-    const source = audioContext.createBufferSource();
-    source.connect(audioContext.destination);
-    source.buffer = this.buffer.get(name);
+  playAudio(name, context) {
+    const source = context.createBufferSource();
+    source.connect(context.destination);
+    source.buffer = this.buffers.get(name);
     source.start(0);
   }
 }

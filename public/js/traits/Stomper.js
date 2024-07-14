@@ -1,12 +1,11 @@
-import Trait from "../Trait.js";
 import Killable from "./Killable.js";
+import Trait from "../Trait.js";
 
 export default class Stomper extends Trait {
   static EVENT_STOMP = Symbol("stomp");
 
   constructor() {
     super();
-
     this.bounceSpeed = 400;
   }
 

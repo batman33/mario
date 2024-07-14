@@ -7,8 +7,12 @@ import Stomper from "../traits/Stomper.js";
 import Trait from "../Trait.js";
 import { loadSpriteSheet } from "../loaders/sprite.js";
 
-export function loadGoomba() {
-  return loadSpriteSheet("goomba").then(createGoombaFactory);
+export function loadGoombaBrown() {
+  return loadSpriteSheet("goomba-brown").then(createGoombaFactory);
+}
+
+export function loadGoombaBlue() {
+  return loadSpriteSheet("goomba-blue").then(createGoombaFactory);
 }
 
 class Behavior extends Trait {
@@ -29,18 +33,18 @@ class Behavior extends Trait {
 }
 
 function createGoombaFactory(sprite) {
-  const walkAnimation = sprite.animations.get("walk");
+  const walkAnim = sprite.animations.get("walk");
 
-  function routeAnimation(goomba) {
+  function routeAnim(goomba) {
     if (goomba.traits.get(Killable).dead) {
       return "flat";
     }
 
-    return walkAnimation(goomba.lifeTime);
+    return walkAnim(goomba.lifetime);
   }
 
   function drawGoomba(context) {
-    sprite.draw(routeAnimation(this), context, 0, 0);
+    sprite.draw(routeAnim(this), context, 0, 0);
   }
 
   return function createGoomba() {
